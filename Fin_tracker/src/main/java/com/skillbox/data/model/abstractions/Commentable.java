@@ -1,7 +1,4 @@
-package com.skillbox.data.model;
-
-
-import java.util.List;
+package com.skillbox.data.model.abstractions;
 
 /**
  * Интерфейс для транзакций, к которым могут быть добавлены комментарии.
@@ -13,6 +10,5 @@ public interface Commentable {
      *
      * @return список комментариев.
      */
-    List<String> getComments();
-
+    String getComment();
 }

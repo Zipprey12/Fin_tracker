@@ -2,6 +2,8 @@ package com.skillbox.controller;
 
 import com.skillbox.controller.option.MenuOption;
 import com.skillbox.controller.option.OptionUtils;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
@@ -11,6 +13,7 @@ import java.util.stream.Collectors;
 /**
  * Абстрактный класс контроллеров. Содержит общий функционал вывода меню и получения ввода пользователя
  */
+@Slf4j
 public abstract class AbstractMenuController<E extends Enum<E> & MenuOption> {
 
     protected final Scanner scanner;
@@ -38,16 +41,20 @@ public abstract class AbstractMenuController<E extends Enum<E> & MenuOption> {
         int option;
 
         while (true) {
-            System.out.println(description);
-            System.out.println(menu);
-            System.out.print("Введите нужную опцию и нажмите Enter: ");
+            log.info(description);
+            log.info(menu);
+            log.info("Введите нужную опцию и нажмите Enter: ");
 
             option = scanner.nextInt();
+            scanner.nextLine();
+
             if (numOptions.contains(option)) {
                 break;
             }
-            System.err.println("Выбрана неверная опция!\n"
-                    + "Попробуйте заново.\n");
+            log.info("""
+                    Выбрана неверная опция!
+                    Попробуйте заново.
+                    """);
         }
         return OptionUtils.of(options, option);
     }
@@ -64,5 +71,4 @@ public abstract class AbstractMenuController<E extends Enum<E> & MenuOption> {
                 .map(MenuOption::toStringRepresentation)
                 .collect(Collectors.joining(System.lineSeparator(), System.lineSeparator(), System.lineSeparator()));
     }
-
 }

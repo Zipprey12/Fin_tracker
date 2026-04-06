@@ -1,4 +1,6 @@
-package com.skillbox.data.model;
+package com.skillbox.data.model.abstractions;
+
+import com.skillbox.data.model.dto.transactions.Transaction;
 
 import java.util.List;
 

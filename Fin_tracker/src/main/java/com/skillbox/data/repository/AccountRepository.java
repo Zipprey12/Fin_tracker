@@ -1,7 +1,8 @@
 package com.skillbox.data.repository;
 
-import com.skillbox.data.model.Account;
+import com.skillbox.data.model.dto.Account;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Интерфейс для чтения аккаунтов (счетов) пользователей
@@ -13,4 +14,6 @@ public interface AccountRepository {
      * @return список счетов
      */
     List<Account> readAll();
+
+    Map<Integer, Account> readAllSortById();
 }
