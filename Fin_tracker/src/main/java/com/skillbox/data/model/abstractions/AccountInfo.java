@@ -1,4 +1,6 @@
-package com.skillbox.data.model;
+package com.skillbox.data.model.abstractions;
+
+import com.skillbox.data.model.enums.AccountType;
 
 /**
  * Интерфейс для получения информации о счете.

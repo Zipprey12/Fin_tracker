@@ -1,4 +1,4 @@
-package com.skillbox.data.model;
+package com.skillbox.data.model.abstractions;
 
 import java.math.BigDecimal;
 

@@ -11,6 +11,7 @@ public interface MenuOption {
 
     /**
      * Возвращает описание элемента перечисления.
+     *
      * @return описание
      */
     String getName();
@@ -21,7 +22,7 @@ public interface MenuOption {
      * @return строковое представление
      */
     default String toStringRepresentation() {
-        return getOption() + " - " + getName();
+        return getOption() + 1 + " - " + getName();
     }
 
 }

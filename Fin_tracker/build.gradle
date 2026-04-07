@@ -1,23 +1,33 @@
 plugins {
     id 'java'
-    id 'io.freefair.lombok' version '8.0.1' // Подключение плагина Lombok
+    id 'io.freefair.lombok' version '8.11' // Подключение плагина Lombok
 }
 
 group = 'com.skillbox'
-version = '1.0-SNAPSHOT' // TODO: при необходимости измените версию проекта
+version = '1.0-SNAPSHOT'
 
-java { // TODO: замените версию Java той, что установлена у вас на компьютере
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
     mavenCentral()
 }
 
-dependencies { // TODO: добавьте нужные зависимости
+dependencies {
+    implementation 'tools.jackson.core:jackson-databind:3.1.1'
+
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+    implementation 'ch.qos.logback:logback-classic:1.4.11'
+
+    implementation 'org.threeten:threeten-extra:1.8.0'
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+tasks.withType(JavaExec).configureEach {
+    systemProperty "file.encoding", "UTF-8"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
 }

@@ -1,6 +1,6 @@
 package com.skillbox.data.repository;
 
-import com.skillbox.data.model.Transaction;
+import com.skillbox.data.model.dto.transactions.Transaction;
 import java.util.List;
 
 /**
