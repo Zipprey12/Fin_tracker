@@ -13,8 +13,16 @@ import static com.skillbox.controller.InputUtil.*;
 @Slf4j
 public class FilterMenuController extends AbstractMenuController<SearchOption> {
 
+    public static final String DATE_DESCRIPTION =
+            "Будут найдены транзакции, которые находятся в диапазоне дат, " +
+            "а также повторяющиеся транзакции, которые выполнятся в указанном диапазоне. \n" +
+            "Формат даты: ГГГГ-ММ-ДД, например 2024-09-27.";
+
+
     public static final String ENTER_MIN_VALUE = "Введите минимальное значение";
     public static final String ENTER_MAX_VALUE = "Введите максимальное значение";
+    public static final String ENTER_START_DATE = "Введите начальную дату";
+    public static final String ENTER_END_DATE = "Введите конечную дату";
 
     public FilterMenuController() {
         super(SearchOption.class, "Выберите способ поиска транзакции");
@@ -72,8 +80,10 @@ public class FilterMenuController extends AbstractMenuController<SearchOption> {
     }
 
     private void inputDates(TransactionFilterOptions options) {
-        var minDate = inputDate(scanner, ENTER_MIN_VALUE);
-        var maxDate = inputDate(scanner, ENTER_MAX_VALUE);
+        log.info(DATE_DESCRIPTION);
+
+        var minDate = inputDate(scanner, ENTER_START_DATE);
+        var maxDate = inputDate(scanner, ENTER_END_DATE);
 
         var isMinPresent = minDate.isPresent();
         var isMaxPresent = maxDate.isPresent();

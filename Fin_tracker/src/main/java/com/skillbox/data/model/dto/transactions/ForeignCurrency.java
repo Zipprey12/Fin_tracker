@@ -8,26 +8,43 @@ import lombok.Getter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-@Getter
 @EqualsAndHashCode(callSuper = true)
 public class ForeignCurrency extends Transaction implements CurrencyConvertible {
 
-    private float interestRate;
+    private BigDecimal rawAmount;
+
+    @Getter
+    private Float exchangeRate;
 
     public ForeignCurrency() {
         super(TransactionType.FOREIGN_CURRENCY);
     }
 
-    public void setInterestRate(float value) {
-        if (value < 0 || value > 100) {
-            throw new IllegalArgumentException("Процентная ставка должна быть от 0 до 100%");
+    @Override
+    public void setAmount(BigDecimal rowAmount){
+        this.rawAmount = rowAmount;
+        convert();
+    }
+
+    public void setExchangeRate(float value) {
+        if (value < 0) {
+            throw new IllegalArgumentException("Курс не может быть отрицательным числом");
         }
-        this.interestRate = value;
+        this.exchangeRate = value;
+        convert();
     }
 
     @Override
     public BigDecimal convertToBaseCurrency(BigDecimal amount) {
-        return amount.multiply(BigDecimal.valueOf(100 - interestRate))
-                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+        return amount.multiply(BigDecimal.valueOf(exchangeRate))
+                .setScale(2, RoundingMode.HALF_UP);
+    }
+
+    private void convert(){
+        if(rawAmount != null && exchangeRate != null){
+            super.setAmount(convertToBaseCurrency(rawAmount));
+            return;
+        }
+        super.setAmount(null);
     }
 }

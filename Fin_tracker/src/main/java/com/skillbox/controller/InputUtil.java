@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -40,7 +41,8 @@ public class InputUtil {
 
         if (!inputText.isEmpty()) {
             try {
-                return Optional.of(LocalDateTime.parse(inputText, TIME_FORMATTER));
+                var date = LocalDate.parse(inputText, TIME_FORMATTER);
+                return Optional.of(date.atStartOfDay());
             } catch (Exception e) {
                 logIncorrectInput();
             }

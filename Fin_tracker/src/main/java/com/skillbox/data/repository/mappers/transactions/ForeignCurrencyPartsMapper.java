@@ -17,13 +17,18 @@ public class ForeignCurrencyPartsMapper extends TransactionPartsMapper{
     @Override
     public Transaction initTransaction(TransactionType type, String[] parts) {
         var interestRate = StringUtil.parseToFloat(parts[INTEREST_RATE_INDEX]);
-
         if(interestRate.isEmpty()) {
             return null;
         }
 
+        var amount = StringUtil.parseToBigDecimal(parts[AMOUNT_INDEX]);
+        if(amount.isEmpty()){
+            return null;
+        }
+
         var transaction =  new ForeignCurrency();
-        transaction.setInterestRate(interestRate.get());
+        transaction.setExchangeRate(interestRate.get());
+        transaction.setAmount(amount.get());
 
         return transaction;
     }

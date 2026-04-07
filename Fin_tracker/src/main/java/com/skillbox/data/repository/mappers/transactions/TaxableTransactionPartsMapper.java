@@ -7,7 +7,7 @@ import com.skillbox.service.utils.StringUtil;
 
 public class TaxableTransactionPartsMapper extends TransactionPartsMapper{
 
-    public static final int AMOUNT_INDEX = 6;
+    public static final int TAX_AMOUNT_INDEX = 6;
 
     @Override
     public int getMinPartsCount() {
@@ -21,8 +21,15 @@ public class TaxableTransactionPartsMapper extends TransactionPartsMapper{
             return null;
         }
 
+        var taxAmount = StringUtil.parseToFloat(parts[TAX_AMOUNT_INDEX]);
+        if(taxAmount.isEmpty()){
+            return null;
+        }
+
         var transaction = new TaxableTransaction();
         transaction.setAmount(amount.get());
+        transaction.setTaxAmount(taxAmount.get());
+
         return transaction;
     }
 }

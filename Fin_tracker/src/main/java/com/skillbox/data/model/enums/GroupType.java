@@ -8,5 +8,5 @@ public enum GroupType {
     BY_CATEGORY,
     EXPENSE_INCOME,
     BY_ACCOUNT_TYPE,
-    BY_USER;
+    BY_USER
 }

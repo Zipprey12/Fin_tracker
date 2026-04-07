@@ -2,6 +2,7 @@ package com.skillbox.controller;
 
 import com.skillbox.controller.option.MenuOption;
 import com.skillbox.controller.option.OptionUtils;
+import com.skillbox.service.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -38,25 +39,32 @@ public abstract class AbstractMenuController<E extends Enum<E> & MenuOption> {
      * @return выбранную опцию пункта меню
      */
     protected E selectMenu() {
-        int option;
+        int selected;
 
         while (true) {
             log.info(description);
             log.info(menu);
             log.info("Введите нужную опцию и нажмите Enter: ");
 
-            option = scanner.nextInt();
-            scanner.nextLine();
+            var input = scanner.nextLine();
+            var option = StringUtil.parseToInt(input);
 
-            if (numOptions.contains(option)) {
-                break;
+            if(option.isEmpty()){
+                log.error("Введено недопустимое значение!");
             }
-            log.info("""
+            else {
+                selected = option.get() - 1;
+                if (numOptions.contains(selected)) {
+                    break;
+                }
+            }
+
+            log.error("""
                     Выбрана неверная опция!
                     Попробуйте заново.
                     """);
         }
-        return OptionUtils.of(options, option);
+        return OptionUtils.of(options, selected);
     }
 
     /**

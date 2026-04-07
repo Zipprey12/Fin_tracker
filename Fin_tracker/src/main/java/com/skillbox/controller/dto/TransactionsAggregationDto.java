@@ -31,7 +31,7 @@ public class TransactionsAggregationDto {
         return aggregate(map, transactions ->
                 transactions.stream()
                         .map(Transaction::getAmount)
-                        .reduce(BigDecimal.ZERO, BigDecimal::add));
+                        .reduce(BigDecimal.ZERO, BigDecimal::add).toPlainString() + " руб.");
     }
 
     public Map<String, Object> count(Map<String, List<Transaction>> map) {
@@ -48,9 +48,9 @@ public class TransactionsAggregationDto {
                     .map(Transaction::getAmount)
                     .reduce(BigDecimal::add)
                     .orElse(BigDecimal.ZERO)
-                    .divide(BigDecimal.valueOf(transactions.size()), 2, RoundingMode.HALF_UP);
+                    .divide(BigDecimal.valueOf(transactions.size()), 5, RoundingMode.HALF_UP)
+                    .stripTrailingZeros().toPlainString() + " руб.";
         });
-
     }
 
     private Map<String, Object> aggregate(Map<String, List<Transaction>> map,

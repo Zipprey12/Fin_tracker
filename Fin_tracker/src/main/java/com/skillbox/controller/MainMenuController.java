@@ -56,6 +56,7 @@ public class MainMenuController extends AbstractMenuController<MainMenuOption> {
                     analytics = transactionService.calculateAnalytics(transactionFilter,
                             groupingDto, aggregateDto);
                     analytics.print();
+                    log.info("\n");
                     break;
                 case SAVE_ANALYTICS:
                     if (analytics == null) {

@@ -25,6 +25,8 @@ public class Account implements AccountInfo, BalanceOperations, AccountStatement
     private int accountId;
     private int userId;
     private AccountType accountType;
+
+    @Setter(AccessLevel.NONE)
     private BigDecimal balance;
 
     @Override
@@ -35,5 +37,7 @@ public class Account implements AccountInfo, BalanceOperations, AccountStatement
     @Override
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
+
+        balance = balance.add(transaction.getAmount());
     }
 }

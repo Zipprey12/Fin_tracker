@@ -12,7 +12,8 @@ import java.math.RoundingMode;
 @EqualsAndHashCode(callSuper = true)
 public class TaxableTransaction extends Transaction implements Taxable {
 
-    private float taxAmount;
+    private Float taxAmount;
+    private BigDecimal amountWithoutTax;
 
     public TaxableTransaction() {
         super(TransactionType.TAXABLE);
@@ -23,12 +24,27 @@ public class TaxableTransaction extends Transaction implements Taxable {
             throw new IllegalArgumentException("Процентная ставка налога должна быть в диапазоне от 0 до 100");
         }
         taxAmount = amount;
+        calculateAmount();
+    }
+
+    @Override
+    public void setAmount(BigDecimal value){
+        amountWithoutTax = value;
+        calculateAmount();
     }
 
     @Override
     public BigDecimal calculateTax() {
-        return getAmount()
-                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
-                .multiply(BigDecimal.valueOf(taxAmount));
+        return amountWithoutTax
+                .multiply(BigDecimal.valueOf(taxAmount))
+                .setScale(2, RoundingMode.HALF_UP);
+    }
+
+    private void calculateAmount(){
+        if(taxAmount != null && amountWithoutTax != null){
+            super.setAmount(amountWithoutTax.subtract(calculateTax()));
+            return;
+        }
+        super.setAmount(null);
     }
 }

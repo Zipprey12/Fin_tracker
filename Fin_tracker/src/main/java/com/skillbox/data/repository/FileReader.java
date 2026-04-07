@@ -1,6 +1,5 @@
 package com.skillbox.data.repository;
 
-import com.skillbox.data.model.dto.Account;
 import com.skillbox.data.repository.mappers.LineMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 @Slf4j
-public class FileReader <T> {
+public class FileReader<T> {
 
     private final LineMapper<T> mapper;
     private final String readErrorMessage;
 
-    public List<T> readAll(String fileName){
+    public List<T> readAll(String fileName) {
         List<T> result = new LinkedList<>();
         var path = Path.of(fileName);
         long index = 0;
