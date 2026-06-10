@@ -1,27 +1,34 @@
 package com.skillbox.controller;
 
-import com.skillbox.controller.dto.TransactionFilterDto;
-import com.skillbox.controller.option.AggregateOption;
-import com.skillbox.controller.option.GroupOption;
+import com.skillbox.controller.dto.TransactionsAggregationDto;
+import com.skillbox.controller.dto.TransactionsFilterDto;
+import com.skillbox.controller.dto.TransactionsGroupingDto;
 import com.skillbox.controller.option.MainMenuOption;
-import com.skillbox.data.model.Analytic;
+import com.skillbox.data.model.dto.Analytic;
 import com.skillbox.data.repository.AnalyticRepository;
 import com.skillbox.service.TransactionService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Консольный контроллер для управления навигацией по главному меню.
  */
+@Slf4j
 public class MainMenuController extends AbstractMenuController<MainMenuOption> {
 
     private final TransactionService transactionService;
     private final AnalyticRepository saver;
-    private final SearchMenuController searchMenuController;
+
+    private final FilterMenuController searchMenuController;
+    private final GroupMenuController groupMenuController;
+    private final AggregationMenuController aggregationMenuController;
 
     public MainMenuController(TransactionService transactionService, AnalyticRepository saver) {
         super(MainMenuOption.class, "Анализ финансов");
         this.transactionService = transactionService;
         this.saver = saver;
-        this.searchMenuController = new SearchMenuController();
+        this.groupMenuController = new GroupMenuController();
+        this.aggregationMenuController = new AggregationMenuController();
+        this.searchMenuController = new FilterMenuController();
     }
 
     public void start() {
@@ -29,32 +36,31 @@ public class MainMenuController extends AbstractMenuController<MainMenuOption> {
     }
 
     private void goMainMenu() {
-        TransactionFilterDto transactionFilter = new TransactionFilterDto();
-        GroupOption groupOption = null;
-        AggregateOption aggregateOption = null;
+        TransactionsFilterDto transactionFilter = new TransactionsFilterDto();
+        TransactionsGroupingDto groupingDto = new TransactionsGroupingDto();
+        TransactionsAggregationDto aggregateDto = new TransactionsAggregationDto();
         Analytic analytics = null;
         while (true) {
             MainMenuOption i = selectMenu();
             switch (i) {
                 case SEARCH_CRITERIA:
-                    transactionFilter = searchMenuController.getTransactionFilter();
+                    transactionFilter = searchMenuController.createTransactionFilter();
                     break;
                 case GROUP_OPTION:
-                    // TODO: реализуйте класс контроллера выбора поля группировки
-                    groupOption = null;
+                    groupingDto = groupMenuController.selectGrouping();
                     break;
                 case AGGREGATION_METHOD:
-                    // TODO: реализуйте класс контроллера выбора поля группировки
-                    aggregateOption = null;
+                    aggregateDto = aggregationMenuController.selectAggregationFunction();
                     break;
                 case CALCULATE_ANALYTICS:
                     analytics = transactionService.calculateAnalytics(transactionFilter,
-                            groupOption, aggregateOption);
-                    System.out.println(analytics);
+                            groupingDto, aggregateDto);
+                    analytics.print();
+                    log.info("\n");
                     break;
                 case SAVE_ANALYTICS:
                     if (analytics == null) {
-                        System.err.println("Необходимо сначала рассчитать аналитику");
+                        log.error("Необходимо сначала рассчитать аналитику");
                         break;
                     }
                     saver.save(analytics);

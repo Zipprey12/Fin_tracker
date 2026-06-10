@@ -1,6 +1,6 @@
 package com.skillbox.data.repository;
 
-import com.skillbox.data.model.Analytic;
+import com.skillbox.data.model.dto.Analytic;
 
 /**
  * Интерфейс для сохранения аналитики

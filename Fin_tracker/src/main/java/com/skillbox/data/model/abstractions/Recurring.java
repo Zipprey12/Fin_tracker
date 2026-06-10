@@ -1,4 +1,4 @@
-package com.skillbox.data.model;
+package com.skillbox.data.model.abstractions;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 /**
  * Интерфейс для транзакций, которые могут повторяться с определенной периодичностью.
  */
-public interface Recurring {
+public interface  Recurring {
 
     /**
      * Возвращает ближайшее дату / время следующего повторения транзакции

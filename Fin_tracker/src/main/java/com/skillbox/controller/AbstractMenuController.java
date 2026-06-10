@@ -2,6 +2,9 @@ package com.skillbox.controller;
 
 import com.skillbox.controller.option.MenuOption;
 import com.skillbox.controller.option.OptionUtils;
+import com.skillbox.service.utils.StringUtil;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
@@ -11,6 +14,7 @@ import java.util.stream.Collectors;
 /**
  * Абстрактный класс контроллеров. Содержит общий функционал вывода меню и получения ввода пользователя
  */
+@Slf4j
 public abstract class AbstractMenuController<E extends Enum<E> & MenuOption> {
 
     protected final Scanner scanner;
@@ -35,21 +39,32 @@ public abstract class AbstractMenuController<E extends Enum<E> & MenuOption> {
      * @return выбранную опцию пункта меню
      */
     protected E selectMenu() {
-        int option;
+        int selected;
 
         while (true) {
-            System.out.println(description);
-            System.out.println(menu);
-            System.out.print("Введите нужную опцию и нажмите Enter: ");
+            log.info(description);
+            log.info(menu);
+            log.info("Введите нужную опцию и нажмите Enter: ");
 
-            option = scanner.nextInt();
-            if (numOptions.contains(option)) {
-                break;
+            var input = scanner.nextLine();
+            var option = StringUtil.parseToInt(input);
+
+            if(option.isEmpty()){
+                log.error("Введено недопустимое значение!");
             }
-            System.err.println("Выбрана неверная опция!\n"
-                    + "Попробуйте заново.\n");
+            else {
+                selected = option.get() - 1;
+                if (numOptions.contains(selected)) {
+                    break;
+                }
+            }
+
+            log.error("""
+                    Выбрана неверная опция!
+                    Попробуйте заново.
+                    """);
         }
-        return OptionUtils.of(options, option);
+        return OptionUtils.of(options, selected);
     }
 
     /**
@@ -64,5 +79,4 @@ public abstract class AbstractMenuController<E extends Enum<E> & MenuOption> {
                 .map(MenuOption::toStringRepresentation)
                 .collect(Collectors.joining(System.lineSeparator(), System.lineSeparator(), System.lineSeparator()));
     }
-
 }
